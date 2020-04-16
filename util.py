@@ -7,10 +7,7 @@
 
 import requests
 import time
-cookie=\
-'''
-ig_did=23BBD2E7-D425-4733-8B93-52FEC0F37904; mid=XnySTgAEAAH92405mPXuQ3N3Pu3P; csrftoken=wmLW0RWM3inETWJ8GAujgiG1aGS0NUnh; shbid=11724; shbts=1585222313.429058; ds_user_id=7273260779; sessionid=7273260779%3ArbTcLPssaXtIQT%3A9; rur=FTW; urlgen="{\"185.245.42.179\": 55933}:1jHRVY:DidgQnnDFC9volHIJmbg1Ayaw1E"
-'''
+cookie='''ig_did=23BBD2E7-D425-4733-8B93-52FEC0F37904; mid=XnySTgAEAAH92405mPXuQ3N3Pu3P; csrftoken=wmLW0RWM3inETWJ8GAujgiG1aGS0NUnh; shbid=11724; shbts=1585222313.429058; ds_user_id=7273260779; sessionid=7273260779%3ArbTcLPssaXtIQT%3A9; rur=FTW; urlgen="{\"185.245.42.179\": 55933}:1jHRVY:DidgQnnDFC9volHIJmbg1Ayaw1E"'''
 
 headers = {
     "accept": "*/*",
@@ -30,17 +27,17 @@ class util_ins(object):
         return result
 
     @staticmethod
-    def save_picture(url, file_path):
+    def save_picture(url, ins_name, file_path):
         status_code = requests.get(url=url,headers=headers).status_code
         if status_code == 200:
             result = requests.get(url)
-            file_name = f"{file_path}.jpg"
+            file_name = f"data/{ins_name}/{file_path}.jpg"
             with open(file_name, 'wb') as f:
                 f.write(result.content)
             f.close()
             print("内容获取成功,暂停0.1s....")
             time.sleep(0.1)
-            fr = open("log.txt", "a")
+            fr = open(f"log/{ins_name}.txt", "a")
             fr.write(url + "\n")
             fr.flush()
             fr.close()

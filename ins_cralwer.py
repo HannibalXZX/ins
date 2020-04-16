@@ -7,6 +7,7 @@
 
 from util import util_ins
 import configparser
+import json
 
 class ins_cralwer(object):
 
@@ -17,32 +18,32 @@ class ins_cralwer(object):
     # 观察网页,获取初始的variables
     def get_init_variables(self, ins_name):
         id = self.cf.get(ins_name, 'id')
-        first = self.cf.get('ins_name', 'first')
-        after = self.cf.get('ins_name', 'after')
+        first = self.cf.get(ins_name, 'first')
+        after = self.cf.get(ins_name, 'after')
         init_variables = {
         "id": id,
         "first": int(first),
         "after": after
         }
-        return init_variables
+        return json.dumps(init_variables)
 
     # 构造variables
     def joint_variables(self, ins_name, after):
         id = self.cf.get(ins_name, 'id')
-        first = self.cf.get('ins_name', 'first')
+        first = self.cf.get(ins_name, 'first')
         init_variables = {
             "id": id,
             "first": int(first),
             "after": after
         }
-        return init_variables
+        return json.dumps(init_variables)
 
     # 构造url
     def joint_url(self, ins_name, variables):
         url = self.cf.get(ins_name, "url")
         query_hash = self.cf.get(ins_name, "query_hash")
         url = f"{url}?query_hash={query_hash}&variables={variables}"
-        print(url)
+        return url
 
     # 获取下一个afet值
     def get_next_after(self, dict_result):
@@ -66,7 +67,7 @@ class ins_cralwer(object):
             if url in list_line:
                 print('url is exist!!!')
             else:
-                util_ins.save_picture(url, str(count))
+                util_ins.save_picture(url, ins_name, str(count))
             count += 1
 
         return count+1
@@ -75,6 +76,7 @@ class ins_cralwer(object):
         # 1、获取初始的url
         init_variables = self.get_init_variables(ins_name)
         url = self.joint_url(ins_name, init_variables)
+        print(url)
 
         # 后期可自行设置
         init_count = 0
@@ -102,3 +104,4 @@ class ins_cralwer(object):
 if __name__ == '__main__':
     ins_cralwer = ins_cralwer()
     ins_name = "bbc_travel"
+    ins_cralwer.process(ins_name)
