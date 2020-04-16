@@ -27,6 +27,21 @@ class util_ins(object):
         return result
 
     @staticmethod
+    def save_text(text, like_count, ins_name, file_path):
+        print("save_text")
+        print(text)
+        try:
+            fr = open(f"data/{ins_name}/text/{file_path}.txt", "w", encoding="utf-8")
+            # print(type(text))
+            fr.write(text + "\n")
+            fr.write(str(like_count)
+        except UnicodeEncodeError as err:
+            print(err)
+            fr.flush()
+            fr.close()
+        
+
+    @staticmethod
     def save(url, ins_name, file_path, category="picture"):
         '''
         :param url: 链接
@@ -42,9 +57,9 @@ class util_ins(object):
             result = requests.get(url)
 
             if category == "picture":
-                file_name = f"data/{ins_name}/{file_path}.jpg"
+                file_name = f"data/{ins_name}/media/{file_path}.jpg"
             elif category == "video":
-                file_name = f"data/{ins_name}/{file_path}.mp4"
+                file_name = f"data/{ins_name}/media/{file_path}.mp4"
             else:
                 print("输入错误！")
                 return

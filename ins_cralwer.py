@@ -65,10 +65,14 @@ class ins_cralwer(object):
         for edge in edges:
             node = edge['node']
             is_video = node['is_video']
+            like_count = node['edge_media_preview_like']['count']
+            text = node['edge_media_to_comment']['edges'][0]['node']['text']
+            print(like_count)
+            print(text)    
             # 判断是否为视频
             if is_video == "true":
                 category = "video"
-                url = node['dash_info']['video_url']
+                url = node['video_url']
             else:
                 category = "picture"
                 url = node['display_url']
@@ -76,6 +80,7 @@ class ins_cralwer(object):
             if url in list_line:
                 print('url is exist!!!')
             else:
+                util_ins.save_text(text, like_count, ins_name, str(count))
                 util_ins.save(url=url, ins_name=ins_name,
                               file_path=str(count), category=category)
                 count += 1
@@ -113,5 +118,5 @@ class ins_cralwer(object):
 
 if __name__ == '__main__':
     ins_cralwer = ins_cralwer()
-    ins_name = "bbc_travel"
+    ins_name = "cats_of_instagram"
     ins_cralwer.process(ins_name)
