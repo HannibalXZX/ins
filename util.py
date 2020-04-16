@@ -7,6 +7,8 @@
 
 import requests
 import time
+import os
+
 cookie='''ig_did=23BBD2E7-D425-4733-8B93-52FEC0F37904; mid=XnySTgAEAAH92405mPXuQ3N3Pu3P; csrftoken=wmLW0RWM3inETWJ8GAujgiG1aGS0NUnh; shbid=11724; shbts=1585222313.429058; ds_user_id=7273260779; sessionid=7273260779%3ArbTcLPssaXtIQT%3A9; rur=FTW; urlgen="{\"185.245.42.179\": 55933}:1jHRVY:DidgQnnDFC9volHIJmbg1Ayaw1E"'''
 
 headers = {
@@ -14,6 +16,8 @@ headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36",
     "cookie": cookie,
 }
+
+
 
 class util_ins(object):
 
@@ -30,6 +34,17 @@ class util_ins(object):
     def save_text(text, like_count, ins_name, file_path):
         print("save_text")
         print(text)
+
+        if "/" in file_path:
+            _list = file_path.split("/")
+            dir = "/".join(_list[:-1])
+            base_dir = f"data/{ins_name}/text/" + dir
+        else:
+            base_dir = f"data/{ins_name}/text"
+
+        if not os.path.exists(base_dir):
+            os.makedirs(base_dir)
+
         try:
             fr = open(f"data/{ins_name}/text/{file_path}.txt", "w", encoding="utf-8")
             # print(type(text))
@@ -56,6 +71,7 @@ class util_ins(object):
         status_code = requests.get(url=url, headers=headers).status_code
         if status_code == 200:
             result = requests.get(url)
+
             if "/" in file_path:
                 _list = file_path.split("/")
                 dir = "/".join(_list[:-1])
@@ -63,7 +79,6 @@ class util_ins(object):
             else:
                 base_dir = f"data/{ins_name}/media"
 
-            import os
             if not os.path.exists(base_dir):
                 os.makedirs(base_dir)
 
