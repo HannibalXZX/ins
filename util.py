@@ -27,14 +27,32 @@ class util_ins(object):
         return result
 
     @staticmethod
-    def save_picture(url, ins_name, file_path):
-        status_code = requests.get(url=url,headers=headers).status_code
+    def save(url, ins_name, file_path, category="picture"):
+        '''
+        :param url: 链接
+        :param ins_name: ins的用户名
+        :param file_path: 文件路径
+        :param category: 种类
+        picture: 图片
+        video：视频
+        :return:
+        '''
+        status_code = requests.get(url=url, headers=headers).status_code
         if status_code == 200:
             result = requests.get(url)
-            file_name = f"data/{ins_name}/{file_path}.jpg"
+
+            if category == "picture":
+                file_name = f"data/{ins_name}/{file_path}.jpg"
+            elif category == "video":
+                file_name = f"data/{ins_name}/{file_path}.mp4"
+            else:
+                print("输入错误！")
+                return
+
             with open(file_name, 'wb') as f:
                 f.write(result.content)
             f.close()
+
             print("内容获取成功,暂停0.1s....")
             time.sleep(0.1)
             fr = open(f"log/{ins_name}.txt", "a")

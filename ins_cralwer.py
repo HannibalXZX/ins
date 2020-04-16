@@ -63,12 +63,22 @@ class ins_cralwer(object):
 
         edges = dict_result['data']['user']['edge_owner_to_timeline_media']['edges']
         for edge in edges:
-            url = edge['node']['display_url']
+            node = edge['node']
+            is_video = node['is_video']
+            # 判断是否为视频
+            if is_video == "true":
+                category = "video"
+                url = node['dash_info']['video_url']
+            else:
+                category = "picture"
+                url = node['display_url']
+
             if url in list_line:
                 print('url is exist!!!')
             else:
-                util_ins.save_picture(url, ins_name, str(count))
-            count += 1
+                util_ins.save(url=url, ins_name=ins_name,
+                              file_path=str(count), category=category)
+                count += 1
 
         return count+1
 
