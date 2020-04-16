@@ -56,6 +56,16 @@ class util_ins(object):
         status_code = requests.get(url=url, headers=headers).status_code
         if status_code == 200:
             result = requests.get(url)
+            if "/" in file_path:
+                _list = file_path.split("/")
+                dir = "/".join(_list[:-1])
+                base_dir = f"data/{ins_name}/media/"+dir
+            else:
+                base_dir = f"data/{ins_name}/media"
+
+            import os
+            if not os.path.exists(base_dir):
+                os.makedirs(base_dir)
 
             if category == "picture":
                 file_name = f"data/{ins_name}/media/{file_path}.jpg"
