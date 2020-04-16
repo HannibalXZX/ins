@@ -60,15 +60,20 @@ class ins_cralwer(object):
         f = open(f'log/{ins_name}.txt', 'r+')
         list_line = [line.strip() for line in f]
         f.close()
-
         edges = dict_result['data']['user']['edge_owner_to_timeline_media']['edges']
         for edge in edges:
-            node = edge['node']
-            is_video = node['is_video']
-            like_count = node['edge_media_preview_like']['count']
-            text = node['edge_media_to_comment']['edges'][0]['node']['text']
-            print(like_count)
-            print(text)    
+            try:
+                node = edge['node']
+                is_video = node['is_video']
+                like_count = node['edge_media_preview_like']['count']
+                text = node['edge_media_to_comment']['edges'][0]['node']['text']
+                # print(like_count)
+                # print(text)
+            except IndexError as e:
+                print(e)
+                text = ''
+                #print(dict_result)
+                
             # 判断是否为视频
             if is_video == "true":
                 category = "video"
@@ -76,16 +81,22 @@ class ins_cralwer(object):
             else:
                 category = "picture"
                 url = node['display_url']
-
+                if "edge_sidecar_to_children" in node:
+                    if not url in list_line:
+                        for num, edge in enumerate(node['edge_sidecar_to_children']['edges']):
+                            url = edge['node']['display_url']
+                            util_ins.save(url=url, ins_name=ins_name, str(count)/str(num))
+                    
+            print(f"---------------------------count = {count}------------------------------------------")
             if url in list_line:
                 print('url is exist!!!')
             else:
                 util_ins.save_text(text, like_count, ins_name, str(count))
                 util_ins.save(url=url, ins_name=ins_name,
                               file_path=str(count), category=category)
-                count += 1
+            count += 1
 
-        return count+1
+        return count
 
     def process(self, ins_name):
         # 1、获取初始的url
@@ -107,7 +118,6 @@ class ins_cralwer(object):
             # 获取新的get请求参数
             variables = self.joint_variables(ins_name, next_after)
             new_url = self.joint_url(ins_name, variables)
-
             result = util_ins.get_website_result(new_url)
             dict_result = eval(result)
             count = self.download(dict_result=dict_result, ins_name=ins_name, count=count)

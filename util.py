@@ -33,8 +33,9 @@ class util_ins(object):
         try:
             fr = open(f"data/{ins_name}/text/{file_path}.txt", "w", encoding="utf-8")
             # print(type(text))
+            text = text.encode('UTF-8','ignore').decode('UTF-8')
             fr.write(text + "\n")
-            fr.write(str(like_count)
+            fr.write(str(like_count))
         except UnicodeEncodeError as err:
             print(err)
             fr.flush()
