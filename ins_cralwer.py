@@ -85,7 +85,7 @@ class ins_cralwer(object):
                     if not url in list_line:
                         for num, edge in enumerate(node['edge_sidecar_to_children']['edges']):
                             url = edge['node']['display_url']
-                            util_ins.save(url=url, ins_name=ins_name, str(count)/str(num))
+                            util_ins.save(url=url, ins_name=ins_name,file_path=str(count)+"/"+str(num), category=category)
                     
             print(f"---------------------------count = {count}------------------------------------------")
             if url in list_line:
@@ -128,5 +128,5 @@ class ins_cralwer(object):
 
 if __name__ == '__main__':
     ins_cralwer = ins_cralwer()
-    ins_name = "cats_of_instagram"
+    ins_name = "discovery"
     ins_cralwer.process(ins_name)
